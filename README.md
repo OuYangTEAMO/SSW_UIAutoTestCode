@@ -1,6 +1,6 @@
 # SSW_UIAutoTestCode
 
-基于 Playwright + pytest 的 UI 自动化测试框架，应用于**ssw可信数据空间**的全流程端到端测试。
+基于 Playwright + pytest 的 UI 自动化测试框架，应用于**蚂蚁树数据交易平台**的全流程端到端测试。
 
 ## 项目概述
 
@@ -25,21 +25,42 @@
 ## 目录结构
 
 ```
-UIAutoTest/
+SSW_UIAutoTestCode/
 ├── config.py              # 配置文件（平台账号、测试数据）
-├── utils.py               # 通用工具函数
 ├── run_all_tests.py       # 一键运行所有测试的入口
-├── test_01_provider.py   # 提供方：数据源/资源创建与发布
-├── test_02_operator.py   # 运营方：资源上架审批
-├── test_03_user.py       # 使用方：购买数据资源
-├── test_04_operator_pay.py # 运营方：交易订单审批
-├── test_05_user_sign.py  # 使用方：签约确认
-├── test_06_provider_sign.py # 提供方：签约确认
-├── test_07_delivery.py   # 交付相关
-├── resources/            # 测试资源文件（封面图、样例表）
-├── videos/               # Playwright 录屏输出目录
-└── latest_order.txt      # 最新订单号（测试间共享）
+│
+├── pages/                 # 页面对象模型（Page Object）
+│   ├── __init__.py
+│   ├── base_page.py       # 基类：封装 Playwright 公共操作
+│   ├── provider_page.py   # 提供方平台页面操作
+│   ├── user_page.py       # 使用方平台页面操作
+│   └── operator_page.py   # 运营方平台页面操作
+│
+├── tests/                 # 测试用例（使用 Page Object 模式）
+│   ├── __init__.py
+│   ├── test_01_provider.py     # 提供方：数据源/资源创建与发布
+│   ├── test_02_operator.py     # 运营方：资源上架审批
+│   ├── test_03_user.py         # 使用方：购买数据资源
+│   ├── test_04_operator_pay.py # 运营方：交易订单审批
+│   ├── test_05_user_sign.py    # 使用方：签约确认
+│   └── test_06_provider_sign.py # 提供方：签约确认
+│
+├── legacy/                # 旧测试文件（原封不动，仅作备份）
+│   └── test_*.py
+│
+├── resources/             # 测试资源文件（封面图、样例表）
+└── videos/                # Playwright 录屏输出目录
 ```
+
+## 架构说明
+
+本项目采用 **Page Object（页面对象）模式**，将页面定位器和页面操作与测试逻辑分离：
+
+- **pages/** — 封装页面元素定位和操作方法，供 tests/ 调用
+- **tests/** — 测试逻辑，简洁地调用 pages 中的方法
+- **legacy/** — 旧版测试文件，未经重构，保持原样
+
+这样做的好处是：当页面 UI 变更时，只需修改 pages/ 中的代码，无需改动 tests/ 中的测试逻辑。
 
 ## 依赖
 
@@ -68,12 +89,12 @@ python run_all_tests.py
 
 ### 运行单个测试文件
 ```bash
-pytest -v test_01_provider.py
+pytest -v tests/test_01_provider.py
 ```
 
 ### 按顺序运行所有测试
 ```bash
-pytest -v --tb=short test_01_provider.py test_02_operator.py test_03_user.py test_04_operator_pay.py test_05_user_sign.py test_06_provider_sign.py
+pytest -v --tb=short tests/test_01_provider.py tests/test_02_operator.py tests/test_03_user.py tests/test_04_operator_pay.py tests/test_05_user_sign.py tests/test_06_provider_sign.py
 ```
 
 ## 配置说明
@@ -105,7 +126,7 @@ pytest -v --tb=short test_01_provider.py test_02_operator.py test_03_user.py tes
 
 ## 测试类说明
 
-### TestProvider (`test_01_provider.py`)
+### TestProvider (`tests/test_01_provider.py`)
 - 登录提供方平台
 - 创建 MySQL 数据源（IP: 192.168.1.15, Port: 1966）
 - 创建数据资源，配置脱敏规则（tel 字段掩码）
@@ -113,26 +134,26 @@ pytest -v --tb=short test_01_provider.py test_02_operator.py test_03_user.py tes
 - 发布数据资源（一口价定价，数据服务交付方式）
 - 启用资源发布
 
-### TestOperator (`test_02_operator.py`)
+### TestOperator (`tests/test_02_operator.py`)
 - 登录运营方平台
 - 进入待办事项
 - 审批数据资源上架
 
-### TestUser (`test_03_user.py`)
+### TestUser (`tests/test_03_user.py`)
 - 登录使用方平台
 - 进入数据资源目录
 - 购买目标资源
 - 获取订单编号并保存（供后续测试使用）
 
-### TestOperatorPay (`test_04_operator_pay.py`)
+### TestOperatorPay (`tests/test_04_operator_pay.py`)
 - 登录运营方平台
 - 审批交易订单
 
-### TestUserSign (`test_05_user_sign.py`)
+### TestUserSign (`tests/test_05_user_sign.py`)
 - 登录使用方平台
 - 对订单进行签约确认
 
-### TestProviderSign (`test_06_provider_sign.py`)
+### TestProviderSign (`tests/test_06_provider_sign.py`)
 - 登录提供方平台
 - 对订单进行签约确认
 
