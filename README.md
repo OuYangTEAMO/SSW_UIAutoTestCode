@@ -1,6 +1,6 @@
 # SSW_UIAutoTestCode
 
-基于 Playwright + pytest 的 UI 自动化测试框架，应用于**蚂蚁树数据交易平台**的全流程端到端测试。
+基于 Playwright + pytest 的 UI 自动化测试框架，应用于**ssw可信数据空间**的全流程端到端测试。
 
 ## 项目概述
 
