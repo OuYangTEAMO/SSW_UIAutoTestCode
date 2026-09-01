@@ -113,6 +113,11 @@ pytest -v --tb=short tests/test_01_provider.py tests/test_02_operator.py tests/t
 - 数据资源名称：`Auto_Resource_{MySQL_MMDD_XXXX}`
 - 价格：随机 1-10000
 
+**交付方式**可通过 `config.py` 统一配置：
+```python
+DELIVERY_METHOD = "隐私计算"  # 可选: "数据服务", "安全沙盒", "隐私计算"
+```
+
 ## 平台账号
 
 > ⚠️ **注意**：生产环境请使用环境变量替代明文密码。
