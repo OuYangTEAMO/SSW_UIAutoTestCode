@@ -1,7 +1,7 @@
 import re
 from playwright.sync_api import Page
 from pages.base_page import BasePage
-from config import TEST_DATA, SAMPLE_FILE, COVER_IMAGE
+from config import DELIVERY_METHOD, TEST_DATA, SAMPLE_FILE, COVER_IMAGE
 
 
 class ProviderPage(BasePage):
@@ -132,12 +132,17 @@ class ProviderPage(BasePage):
         self.page.get_by_text("调用次数限制").click()
         self.page.get_by_role("button", name="添 加").click()
         self.page.get_by_role("spinbutton", name="请输入调用次数").fill("3")
+        # 改为动态选择交付方式  config.py 中新增 DELIVERY_METHOD 配置项
         self.page.get_by_role("combobox", name="* 交付方式").click()
-        self.page.get_by_text("数据服务", exact=True).click()
+        # self.page.get_by_text("数据服务", exact=True).click()
+        # self.page.get_by_text("安全沙盒", exact=True).click()
+        # self.page.get_by_text("隐私计算", exact=True).click()
+        self.page.get_by_text(DELIVERY_METHOD, exact=True).click()
         self.page.get_by_role("button", name="下一步").click()
 
         # 数据空间
-        self.page.get_by_role("checkbox", name="尚数网可信数据空间").check()
+        # self.page.get_by_role("checkbox", name="尚数网可信数据空间").check()
+        self.page.get_by_role("checkbox", name=re.compile(r"可信数据空间")).check()
         self.page.get_by_role("button", name="确 定").click()
 
         # 启用发布

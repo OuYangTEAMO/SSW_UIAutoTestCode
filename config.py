@@ -17,8 +17,10 @@ PLATFORMS = {
         },
     "operator": { # 运营方服务平台
         "url": "https://tds.mayishangshu.cn:82/",
-        "username": "Presenter",
-        "password": "0000"
+        # "username": "Presenter",
+        # "password": "0000"
+        "username": "admin",
+        "password": "Ssw@1688"
     },
     "delivery": { # 交付平台
         "url": "https://dos.mayishangshu.cn:82/",
@@ -27,6 +29,10 @@ PLATFORMS = {
     }
 }
 
+# =========== 新增：统一配置项，用于控制交付方式 ==========
+# 可选值: "数据服务", "安全沙盒", "隐私计算"
+DELIVERY_METHOD = "隐私计算"
+
 # 生成基础字符串：MySQL_MMDD_随机4位数
 today = datetime.datetime.now().strftime("%m%d")
 rand_num = random.randint(1000, 9999)
@@ -34,7 +40,7 @@ base = f"MySQL_{today}_{rand_num}"
 
 TEST_DATA = {
     "datasource_name": f"Auto_{base}", # 数据源名称
-    "resource_name": f"Auto_Resource_{base}", # 数据资源名称
+    "resource_name": f"Auto_{DELIVERY_METHOD}_Resource_{base}", # 数据资源名称
     "price": f"{random.randint(1, 10000)}" # 产品价格
 }
 
