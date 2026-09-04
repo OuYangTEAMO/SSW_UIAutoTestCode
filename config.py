@@ -31,7 +31,7 @@ PLATFORMS = {
 
 # =========== 新增：统一配置项，用于控制交付方式 ==========
 # 可选值: "数据服务", "安全沙盒", "隐私计算"
-DELIVERY_METHOD = "隐私计算"
+DELIVERY_METHOD = "数据服务"
 
 # 生成基础字符串：MySQL_MMDD_随机4位数
 today = datetime.datetime.now().strftime("%m%d")
